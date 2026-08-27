@@ -18,8 +18,11 @@ try
 {
     List<Statement> statements = parser.Parse();
 
-    Console.WriteLine("Parser executado com sucesso!");
-    Console.WriteLine($"Statements encontrados: {statements.Count}");
+    Console.WriteLine("=== AST ===");
+
+    ASTPrinter printer = new ASTPrinter();
+
+    printer.Print(statements);
 }
 catch (ParserException ex)
 {
