@@ -174,6 +174,9 @@ public class Lexer
             case '<':
                 AddToken(Match('=') ? TokenType.LessEqual : TokenType.Less);
                 break;
+            case ',':
+                AddToken(TokenType.Comma);
+                break;    
 
             case '"':
                 String();

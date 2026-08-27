@@ -38,6 +38,7 @@ public enum TokenType
     LeftParenthesis,
     RightParenthesis,
     Colon,
+    Comma,
 
     // Controle
     NewLine,
