@@ -1,11 +1,10 @@
 using HERMESLANG.Lexer;
 using HERMESLANG.Parser;
+using HERMESLANG.Interpreter;
 
 string codigo = """
 vida = 100
-
-se vida > 50:
-    mostrar("Vida alta")
+outra_vida = vida
 """;
 
 Lexer lexer = new Lexer(codigo);
@@ -21,10 +20,22 @@ try
     Console.WriteLine("=== AST ===");
 
     ASTPrinter printer = new ASTPrinter();
-
     printer.Print(statements);
+
+    Console.WriteLine();
+    Console.WriteLine("=== INTERPRETER ===");
+
+    Interpreter interpreter = new Interpreter();
+
+    interpreter.Interpret(statements);
+
+    Console.WriteLine("Programa executado com sucesso!");
 }
 catch (ParserException ex)
 {
     Console.WriteLine($"Erro de Parser: {ex.Message}");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Erro de execução: {ex.Message}");
 }
