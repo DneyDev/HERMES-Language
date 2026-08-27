@@ -28,6 +28,12 @@ try
     Interpreter interpreter = new Interpreter();
 
     interpreter.Interpret(statements);
+    foreach (var variable in interpreter.GetVariables())
+    {
+        Console.WriteLine(
+            $"{variable.Key} = {variable.Value}"
+        );
+    }
 
     Console.WriteLine("Programa executado com sucesso!");
 }
