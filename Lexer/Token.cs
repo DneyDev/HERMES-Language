@@ -17,6 +17,19 @@ public class Token
 
     public override string ToString()
     {
-        return $"{Type} | {Lexeme} | {Literal}";
+        if (
+            Type == TokenType.NewLine ||
+            Type == TokenType.Indent ||
+            Type == TokenType.Dedent ||
+            Type == TokenType.EndOfFile
+            )
+        {
+            return Type.ToString();
+        }
+        if(Literal is null)
+        {
+            return $"{Type} | {Lexeme}";
+        } 
+        return $"{Type} | {Lexeme} | {Literal}"; 
     }
 }
