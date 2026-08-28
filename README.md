@@ -2,9 +2,11 @@
 
 Linguagem de programação educacional baseada em Python, adaptada para o português e desenvolvida em C#.
 
+Criador: Sidney Rodrigues - Desenvolvedor Backend do Projeto H.E.R.M.E.S.
+
 ## Objetivo
 
-A Linguagem HERMES foi criada para ser utilizada em um jogo educacional desenvolvido em Unity: Projeto H.E.R.M.E.S.
+A Linguagem HERMES foi criada para ser utilizada em um jogo educacional desenvolvido em Unity pela equipe do Núcleo de Tecnologia Educacional (NTE) da Secretaria de Educação e Esportes de Paulista, Projeto H.E.R.M.E.S.
 
 Seu objetivo é permitir que jogadores de 9 a 13 anos aprendam conceitos de programação por meio de puzzles e desafios dentro do jogo.
 
