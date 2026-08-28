@@ -17,10 +17,10 @@ public class Lexer
     private static readonly Dictionary<string, TokenType> Keywords = new()
     {
         { "se", TokenType.Se },
-        { "senão", TokenType.Senao },
+        { "senao", TokenType.Senao },
         { "e", TokenType.E },
         { "ou", TokenType.Ou },
-        { "não", TokenType.Nao },
+        { "nao", TokenType.Nao },
         { "Verdadeiro", TokenType.Boolean },
         { "Falso", TokenType.Boolean }
     };

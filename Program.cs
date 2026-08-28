@@ -2,10 +2,14 @@ using HERMESLANG.Lexer;
 using HERMESLANG.Parser;
 using HERMESLANG.Interpreter;
 
-string codigo = """
+string codigo = """ 
 vida = 100
-outra_vida = vida
-""";
+energia = 50
+porta_aberta = Falso
+
+se vida > 0 e energia > 0 e nao porta_aberta:
+    abrir = Verdadeiro
+"""; //essa parte "codigo" é onde aparece no terminal no final dele, onde testa se funciona
 
 Lexer lexer = new Lexer(codigo);
 

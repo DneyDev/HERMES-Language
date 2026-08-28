@@ -87,6 +87,9 @@ public class Interpreter
             case BinaryExpression binary:
                 return EvaluateBinary(binary);
 
+            case UnaryExpression unary:
+                return EvaluateUnary(unary);    
+
             case CallExpression call:
                 return EvaluateCall(call);
 
@@ -105,6 +108,12 @@ public class Interpreter
 
         return expression.Operator.Type switch //definição dos tipos de Token
         {
+            HERMESLANG.Lexer.TokenType.E
+                => IsTruthy(left) && IsTruthy(right),
+
+            HERMESLANG.Lexer.TokenType.Ou
+                => IsTruthy(left) || IsTruthy(right),
+
             HERMESLANG.Lexer.TokenType.Plus
                 => Convert.ToDouble(left) + Convert.ToDouble(right),
             
@@ -147,6 +156,21 @@ public class Interpreter
         throw new Exception(
             $"Função '{expression.Name}' ainda não está registrada."
         );
+    }
+
+    private object? EvaluateUnary(UnaryExpression expression)
+    {
+        object? right = Evaluate(expression.Right);
+
+        return expression.Operator.Type switch
+        {
+            HERMESLANG.Lexer.TokenType.Nao
+                => !IsTruthy(right),
+
+            _ => throw new Exception(
+                $"Operador unário não suportado: {expression.Operator.Type}"
+             )
+        };
     }
 
     private bool IsTruthy(object? value)

@@ -136,6 +136,60 @@ public class Parser
 
     private Expression ParseExpression()
     {
+        return ParseOr();
+    }
+
+    private Expression ParseOr()
+    {
+        Expression expression = ParseAnd();
+
+        while (Match(TokenType.Ou))
+        {
+            Token operatorToken = Previous();
+
+            Expression right = ParseAnd();
+
+            expression = new BinaryExpression(
+                expression,
+                operatorToken,
+                right
+            );
+        }
+        return expression;
+    }
+
+    private Expression ParseAnd()
+    {
+        Expression expression = ParseNot();
+
+        while (Match(TokenType.E))
+        {
+            Token operatorToken = Previous();
+
+            Expression right = ParseNot();
+
+            expression = new BinaryExpression(
+                expression,
+                operatorToken,
+                right
+            );
+        }
+        return expression;
+    }
+
+    private Expression ParseNot()
+    {
+        if (Match(TokenType.Nao))
+        {
+            Token operatorToken = Previous();
+
+            Expression right = ParseNot();
+
+            return new UnaryExpression(
+                operatorToken,
+                right
+            );
+        }
         return ParseComparison();
     }
 
