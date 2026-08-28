@@ -100,9 +100,37 @@ public class Parser
             "Esperado fim do bloco."
         );
 
+        List<Statement> elseBody = new();
+
+        if (Match(TokenType.Senao))
+        {
+            Consume(
+                TokenType.Colon,
+                "Esperado ':' após 'senão'."
+            );
+            Consume(
+                TokenType.NewLine,
+                "Esperado nova linha após ':'."
+            );
+            Consume(
+                TokenType.Indent,
+                "Esperado bloco indentado após 'senão'."
+            );
+            while(!Check(TokenType.Dedent) && !IsAtEnd())
+            {
+                if(Match(TokenType.NewLine)) continue;
+                elseBody.Add(ParseStatement());
+            }
+            Consume(
+                TokenType.Dedent,
+                "Esperado fim do bloco 'senão'."
+            );
+        }
+
         return new IfStatement(
             condition,
-            body
+            body,
+            elseBody
         );
     }
 
@@ -113,7 +141,7 @@ public class Parser
 
     private Expression ParseComparison()
     {
-        Expression expression = ParsePrimary();
+        Expression expression = ParseTerm();
 
         while (Match(
             TokenType.EqualEqual,
@@ -125,7 +153,28 @@ public class Parser
         {
             Token operatorToken = Previous();
 
-            Expression right = ParsePrimary();
+            Expression right = ParseTerm();
+
+            expression = new BinaryExpression(
+                expression,
+                operatorToken,
+                right
+            );
+        }
+
+        return expression;
+    }
+    private Expression ParseTerm()
+    {
+        Expression expression = ParseFactor();
+
+        while (Match(
+            TokenType.Plus,
+            TokenType.Minus))
+        {
+            Token operatorToken = Previous();
+
+            Expression right = ParseFactor();
 
             expression = new BinaryExpression(
                 expression,
@@ -202,6 +251,28 @@ public class Parser
             name.Lexeme,
             arguments
         );
+    }
+
+    private Expression ParseFactor()
+    {
+        Expression expression = ParsePrimary();
+
+        while(Match(
+            TokenType.Multiply,
+            TokenType.Divide
+        ))
+        {
+            Token operatorToken = Previous();
+
+            Expression right = ParsePrimary();
+
+            expression = new BinaryExpression(
+                expression,
+                operatorToken,
+                right
+            );
+        }
+        return expression;
     }
 
     private bool Match(params TokenType[] types)
