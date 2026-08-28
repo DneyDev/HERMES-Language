@@ -64,6 +64,13 @@ public class Interpreter
             {
                 Execute(bodyStatement);
             }
+
+            return;
+        }
+
+        foreach(Statement elseStatement in statement.ElseBody)
+        {
+            Execute(elseStatement);
         }
     }
 
@@ -96,8 +103,20 @@ public class Interpreter
         object? left = Evaluate(expression.Left);
         object? right = Evaluate(expression.Right);
 
-        return expression.Operator.Type switch
+        return expression.Operator.Type switch //definição dos tipos de Token
         {
+            HERMESLANG.Lexer.TokenType.Plus
+                => Convert.ToDouble(left) + Convert.ToDouble(right),
+            
+            HERMESLANG.Lexer.TokenType.Minus
+                => Convert.ToDouble(left) - Convert.ToDouble(right),
+
+            HERMESLANG.Lexer.TokenType.Multiply
+                => Convert.ToDouble(left) * Convert.ToDouble(right),
+
+            HERMESLANG.Lexer.TokenType.Divide
+                => Convert.ToDouble(left) / Convert.ToDouble(right),
+
             HERMESLANG.Lexer.TokenType.Greater
                 => Convert.ToDouble(left) > Convert.ToDouble(right),
 
