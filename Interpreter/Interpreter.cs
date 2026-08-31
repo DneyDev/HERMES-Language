@@ -100,8 +100,7 @@ public class Interpreter
         }
     }
 
-    private object? EvaluateBinary(
-        BinaryExpression expression)
+    private object? EvaluateBinary(BinaryExpression expression)
     {
         object? left = Evaluate(expression.Left);
         object? right = Evaluate(expression.Right);
@@ -115,28 +114,28 @@ public class Interpreter
                 => IsTruthy(left) || IsTruthy(right),
 
             HERMESLANG.Lexer.TokenType.Plus
-                => Convert.ToDouble(left) + Convert.ToDouble(right),
+                => Add(left, right),
             
             HERMESLANG.Lexer.TokenType.Minus
-                => Convert.ToDouble(left) - Convert.ToDouble(right),
+                => Subtract(left, right),
 
             HERMESLANG.Lexer.TokenType.Multiply
-                => Convert.ToDouble(left) * Convert.ToDouble(right),
+                => Multiply(left, right),
 
             HERMESLANG.Lexer.TokenType.Divide
-                => Convert.ToDouble(left) / Convert.ToDouble(right),
+                => Divide(left, right),
 
             HERMESLANG.Lexer.TokenType.Greater
-                => Convert.ToDouble(left) > Convert.ToDouble(right),
+                => CompareNumbers(left, right, ">"),
 
             HERMESLANG.Lexer.TokenType.Less
-                => Convert.ToDouble(left) < Convert.ToDouble(right),
+                => CompareNumbers(left, right, "<"),
 
             HERMESLANG.Lexer.TokenType.GreaterEqual
-                => Convert.ToDouble(left) >= Convert.ToDouble(right),
+                => CompareNumbers(left, right, ">="),
 
             HERMESLANG.Lexer.TokenType.LessEqual
-                => Convert.ToDouble(left) <= Convert.ToDouble(right),
+                => CompareNumbers(left, right, "<="),
 
             HERMESLANG.Lexer.TokenType.EqualEqual
                 => Equals(left, right),
@@ -149,7 +148,82 @@ public class Interpreter
             )
         };
     }
+    //métodos matemáticos definidos abaixo
+    private object Add(object? left, object? right) //somar
+    {
+        if (left is double leftNumber && right is double rightNumber)
+        {
+            return leftNumber + rightNumber;
+        }
+        if(left is string leftString && right is string rightString)
+        {
+            return leftString + rightString;
+        }
 
+        throw new Exception(
+            "O operador '+' só pode ser usado entre números ou textos."
+        );
+    }
+
+    private object Subtract(object? left, object? right)//subtrair
+    {
+        if(left is double leftNumber && right is double rightNumber)
+        {
+            return leftNumber - rightNumber;
+        }
+        throw new Exception(
+            "O operador '-' só pode ser usado entre números."
+        );
+    }
+
+    private object Multiply(object? left, object? right)//multiplicar
+    {
+        if(left is double leftNumber && right is double rightNumber)
+        {
+            return leftNumber * rightNumber;
+        }
+        throw new Exception(
+            "O operador '*' só pode ser usado entre números."
+        );
+    }
+
+    private object Divide(object? left, object? right)//dividir
+    {
+        if(left is double leftNumber && right is double rightNumber)
+        {
+            if(rightNumber == 0)
+            {
+                throw new Exception(
+                    "Não é possível dividir por zero."
+                );
+            }
+            return leftNumber / rightNumber;
+        }
+        throw new Exception(
+            "O operador '/' só pode ser usado entre números."
+        );
+    }
+
+    private bool CompareNumbers(object? left, object? right, string operatorSymbol)
+    {
+        if(left is not double leftNumber || right is not double rightNumber)
+        {
+            throw new Exception(
+                $"O operador '{operatorSymbol}' só pode ser usado entre números."
+            );
+        }
+        return operatorSymbol switch
+        {
+            ">" => leftNumber > rightNumber,
+            "<" => leftNumber < rightNumber,
+            ">=" => leftNumber >= rightNumber,
+            "<=" => leftNumber <= rightNumber,
+
+            _ => throw new Exception(
+                $"Operador de comparação inválido: {operatorSymbol}"
+            )
+        };
+    }
     private object? EvaluateCall(
         CallExpression expression)
     {
