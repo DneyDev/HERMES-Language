@@ -227,9 +227,9 @@ public class Interpreter
     }
     private readonly FunctionRegistry _functionRegistry;
 
-    public void RegisterFunction(string name, Func<List<object?>, object?> function)
+    public void RegisterFunction(IHermesFunction function)
     {
-        _functionRegistry.Register(name, function);
+        _functionRegistry.Register(function);
     }
     private object? EvaluateCall(CallExpression expression)
     {
