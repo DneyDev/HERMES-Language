@@ -277,6 +277,18 @@ public class Parser
             );
         }
 
+        if (Match(TokenType.LeftParenthesis))
+        {
+            Expression expression = ParseExpression();
+
+            Consume(
+                TokenType.RightParenthesis,
+                "Esperado ')' após a expressão"
+            );
+
+            return expression;
+        }
+
         throw Error(
             Peek(),
             "Expressão inválida."
