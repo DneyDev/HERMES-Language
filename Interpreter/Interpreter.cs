@@ -37,6 +37,9 @@ public class Interpreter
                 ExecuteIf(ifStatement);
                 break;
 
+            case WhileStatement whileStatement:
+                ExecuteWhile(whileStatement);
+                break;
             default:
                 throw new Exception(
                     $"Statement não suportado: {statement.GetType().Name}"
@@ -44,8 +47,7 @@ public class Interpreter
         }
     }
 
-    private void ExecuteAssignment(
-        AssignmentStatement statement)
+    private void ExecuteAssignment(AssignmentStatement statement)
     {
         object? value = Evaluate(statement.Value);
 
@@ -75,6 +77,30 @@ public class Interpreter
         }
     }
 
+    private void ExecuteWhile(WhileStatement statement)
+    {
+        int iterations = 0;
+        const int maxIterations = 10000;
+
+        while (IsTruthy(Evaluate(statement.Condition)))
+        {
+            iterations++;
+
+            if (iterations > maxIterations)
+            {
+                throw new Exception(
+                    "O loop 'enquanto' excedeu o limite de execuções."
+                );
+            }
+
+            foreach (Statement bodyStatement in statement.Body)
+            {
+                Execute(bodyStatement);
+            }
+        }
+    }
+
+    
     private object? Evaluate(Expression expression)
     {
         switch (expression)

@@ -16,6 +16,7 @@ public enum TokenType
     E,
     Ou,
     Nao,
+    Enquanto,
 
     // Operadores matemáticos
     Plus,

@@ -33,6 +33,10 @@ public class Parser
         {
             return ParseIfStatement();
         }
+        if (Match(TokenType.Enquanto))
+        {
+            return ParseWhileStatement();
+        }
 
         if (Check(TokenType.Identifier) &&
             CheckNext(TokenType.Assign))
@@ -41,6 +45,42 @@ public class Parser
         }
 
         return new ExpressionStatement(ParseExpression());
+    }
+
+    private Statement ParseWhileStatement()
+    {
+        Expression condition = ParseExpression();
+
+
+        Consume(
+            TokenType.Colon,
+            "Esperado ':' após a condição."
+        );
+
+        Consume(
+            TokenType.NewLine,
+            "Esperado nova linha após ':'."
+        );
+
+        Consume(
+            TokenType.Indent,
+            "Esperado bloco indentado."
+        );
+
+        List<Statement> body = new();
+
+        while(!Check(TokenType.Dedent) && !IsAtEnd())
+        {
+            if(Match(TokenType.NewLine)) continue;
+            body.Add(ParseStatement());
+        }
+
+        Consume(
+            TokenType.Dedent,
+            "Esperado fim do bloco 'enquanto'."
+        );
+
+        return new WhileStatement(condition, body);
     }
 
     private Statement ParseAssignment()

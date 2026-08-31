@@ -22,7 +22,8 @@ public class Lexer
         { "ou", TokenType.Ou },
         { "nao", TokenType.Nao },
         { "Verdadeiro", TokenType.Boolean },
-        { "Falso", TokenType.Boolean }
+        { "Falso", TokenType.Boolean },
+        { "enquanto", TokenType.Enquanto}
     };
 
     public Lexer(string source)
@@ -94,14 +95,18 @@ public class Lexer
             {
                 HandleIndentation();
 
-                if (_current >= _source.Length)
+                if (IsAtEnd())
                     break;
+
+                // IMPORTANTE:
+                // a indentação já foi consumida,
+                // então o início do token deve ser atualizado.
+                _start = _current;
             }
 
             ScanToken();
         }
 
-        // Fecha possíveis blocos ainda abertos.
         while (_indentLevels.Count > 1)
         {
             _indentLevels.RemoveAt(_indentLevels.Count - 1);

@@ -59,6 +59,28 @@ public class ASTPrinter
             return;
         }
 
+        if(statement is WhileStatement whileStatement)
+        {
+            AddLine(level, "WhileStatement");
+
+            AddLine(level + 1, "Condição:");
+            PrintExpression(
+                whileStatement.Condition,
+                level + 2
+            );
+
+            AddLine(level + 1, "Corpo:");
+
+            foreach(Statement bodyStatement in whileStatement.Body)
+            {
+                PrintStatement(
+                    bodyStatement,
+                    level + 2
+                );
+            }
+            return;
+        }
+
         AddLine(level, $"Statement desconhecido: {statement.GetType().Name}");
     }
 

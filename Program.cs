@@ -4,7 +4,10 @@ using HERMESLANG.Interpreter;
 using HERMESLANG.Runtime.Functions;
 
 string codigo = """ 
-mostrar()
+contador = 0
+
+enquanto contador < 5:
+    contador = contador + 1
 """; //essa parte "codigo" é onde aparece no terminal no final dele, onde testa se funciona
 
 Lexer lexer = new Lexer(codigo);
@@ -36,6 +39,13 @@ try
     );
 
     interpreter.Interpret(statements);
+
+    foreach (var variable in interpreter.GetVariables())
+    {
+        Console.WriteLine(
+            $"{variable.Key} = {variable.Value}"
+        );
+    }
 
     Console.WriteLine("Programa executado com sucesso!");
 }
