@@ -1,10 +1,10 @@
 using HERMESLANG.Lexer;
 using HERMESLANG.Parser;
 using HERMESLANG.Interpreter;
-using System.Reflection.Metadata.Ecma335;
+using HERMESLANG.Runtime.Functions;
 
 string codigo = """ 
-abrir_porta()
+mostrar()
 """; //essa parte "codigo" é onde aparece no terminal no final dele, onde testa se funciona
 
 Lexer lexer = new Lexer(codigo);
@@ -28,21 +28,11 @@ try
     Interpreter interpreter = new Interpreter();
     //abaixo é onde registra funções
     interpreter.RegisterFunction(
-        "mostrar",
-        arguments =>
-        {
-            Console.WriteLine(arguments[0]);
-            return null;
-        }
+        new MostrarFunction()
     );
 
     interpreter.RegisterFunction(
-        "abrir_porta",
-        arguments =>
-        {
-            Console.WriteLine("Porta aberta!");
-            return null;
-        }
+        new AbrirPortaFunction()
     );
 
     interpreter.Interpret(statements);
