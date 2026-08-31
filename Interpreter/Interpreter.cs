@@ -10,6 +10,7 @@ public class Interpreter
     public Interpreter()
     {
         _environment = new HERMESLANG.Runtime.Environment();
+        _functionRegistry = new FunctionRegistry();
     }
 
     public void Interpret(List<Statement> statements)
@@ -224,12 +225,22 @@ public class Interpreter
             )
         };
     }
-    private object? EvaluateCall(
-        CallExpression expression)
+    private readonly FunctionRegistry _functionRegistry;
+
+    public void RegisterFunction(string name, Func<List<object?>, object?> function)
     {
-        throw new Exception(
-            $"Função '{expression.Name}' ainda não está registrada."
-        );
+        _functionRegistry.Register(name, function);
+    }
+    private object? EvaluateCall(CallExpression expression)
+    {
+        List<object?> arguments = new();
+
+        foreach(Expression argument in expression.Arguments)
+        {
+            arguments.Add(Evaluate(argument));
+        }
+
+        return _functionRegistry.Call(expression.Name, arguments);
     }
 
     private object? EvaluateUnary(UnaryExpression expression)
