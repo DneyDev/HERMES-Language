@@ -1,5 +1,6 @@
 using HERMESLANG.Parser;
 using HERMESLANG.Runtime;
+using HERMESLANG.Runtime.Errors;
 
 namespace HERMESLANG.Interpreter;
 
@@ -187,7 +188,7 @@ public class Interpreter
             return leftString + rightString;
         }
 
-        throw new Exception(
+        throw new InvalidTypeException(
             "O operador '+' só pode ser usado entre números ou textos."
         );
     }
@@ -198,7 +199,7 @@ public class Interpreter
         {
             return leftNumber - rightNumber;
         }
-        throw new Exception(
+        throw new InvalidTypeException(
             "O operador '-' só pode ser usado entre números."
         );
     }
@@ -209,7 +210,7 @@ public class Interpreter
         {
             return leftNumber * rightNumber;
         }
-        throw new Exception(
+        throw new InvalidTypeException(
             "O operador '*' só pode ser usado entre números."
         );
     }
@@ -220,13 +221,11 @@ public class Interpreter
         {
             if(rightNumber == 0)
             {
-                throw new Exception(
-                    "Não é possível dividir por zero."
-                );
+                throw new DivisionByZeroException();
             }
             return leftNumber / rightNumber;
         }
-        throw new Exception(
+        throw new InvalidTypeException(
             "O operador '/' só pode ser usado entre números."
         );
     }
@@ -246,7 +245,7 @@ public class Interpreter
             ">=" => leftNumber >= rightNumber,
             "<=" => leftNumber <= rightNumber,
 
-            _ => throw new Exception(
+            _ => throw new HermesException(
                 $"Operador de comparação inválido: {operatorSymbol}"
             )
         };

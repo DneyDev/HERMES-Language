@@ -2,12 +2,10 @@ using HERMESLANG.Lexer;
 using HERMESLANG.Parser;
 using HERMESLANG.Interpreter;
 using HERMESLANG.Runtime.Functions;
+using HERMESLANG.Runtime;
 
 string codigo = """ 
-contador = 0
-
-enquanto contador < 5:
-    contador = contador + 1
+abrir_portao()
 """; //essa parte "codigo" é onde aparece no terminal no final dele, onde testa se funciona
 
 Lexer lexer = new Lexer(codigo);
@@ -52,6 +50,17 @@ try
 catch (ParserException ex)
 {
     Console.WriteLine($"Erro de Parser: {ex.Message}");
+}
+catch (HermesException ex)
+{
+    Console.WriteLine("=== ERRO HERMES ===");
+
+    if (ex.Line.HasValue)
+    {
+        Console.WriteLine($"Linha: {ex.Line.Value}");
+    }
+
+    Console.WriteLine($"Mensagem: {ex.Message}");
 }
 catch (Exception ex)
 {
