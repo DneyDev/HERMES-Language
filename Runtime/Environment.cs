@@ -16,9 +16,7 @@ public class Environment
             return value;
         }
 
-        throw new Exception(
-            $"Variável '{name}' não foi definida."
-        );
+        throw new HERMESLANG.Runtime.Errors.UndefinedVariableException(name);
     }
 
     public bool Exists(string name)

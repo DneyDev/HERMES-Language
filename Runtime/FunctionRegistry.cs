@@ -1,3 +1,5 @@
+using HERMESLANG.Runtime.Errors;
+
 namespace HERMESLANG.Runtime;
 
 public class FunctionRegistry
@@ -18,18 +20,19 @@ public class FunctionRegistry
         string name,
         List<object?> arguments)
     {
-        if (!_functions.TryGetValue(name, out IHermesFunction? function))
+        if (!_functions.TryGetValue(
+                name,
+                out IHermesFunction? function))
         {
-            throw new Exception(
-                $"Função '{name}' não está registrada."
-            );
+            throw new UndefinedFunctionException(name);
         }
 
         if (arguments.Count != function.Arity)
         {
-            throw new Exception(
-                $"A função '{name}' espera {function.Arity} argumento(s), " +
-                $"mas recebeu {arguments.Count}."
+            throw new FunctionArityException(
+                name,
+                function.Arity,
+                arguments.Count
             );
         }
 
